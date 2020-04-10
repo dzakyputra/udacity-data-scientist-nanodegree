@@ -1,5 +1,7 @@
 # Disaster Response Pipeline Project
 
+You can check the running web app in this [link](http://206.189.80.196:3000).
+
 ## Prerequisites
 ### Libraries
 To be able to run this project, you need to install the required libraries in the `requirements.txt`. Run the command below.
