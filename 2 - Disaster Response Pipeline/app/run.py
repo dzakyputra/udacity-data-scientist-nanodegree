@@ -1,13 +1,14 @@
 import json
 import plotly
 import pandas as pd
+import plotly.graph_objects as go
 
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Histogram
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -26,11 +27,11 @@ def tokenize(text):
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/YourDatabaseName.db')
-df = pd.read_sql_table('YourTableName', engine)
+engine = create_engine('sqlite:///../data/DisasterResponse.db')
+df = pd.read_sql_table('messages', engine)
 
 # load model
-model = joblib.load("../models/your_model_name.pkl")
+model = joblib.load("../models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -39,28 +40,72 @@ model = joblib.load("../models/your_model_name.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
-    genre_counts = df.groupby('genre').count()['message']
-    genre_names = list(genre_counts.index)
+    # Viz 1
+    genre = df.groupby('genre').count()['id'].sort_values()
     
+    # Viz 2
+    df['text length'] = df['message'].apply(lambda x: len(x.split()))
+    histogram = df[df['text length'] < 100].groupby('text length').count()['id']
+
+    # Viz 3
+    total_category = df.drop(columns=['id','message','original','genre', 'text length']).sum().sort_values(ascending=False).head(5)
+
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
                 Bar(
-                    x=genre_names,
-                    y=genre_counts
+                    x=genre.values,
+                    y=genre.index,
+                    orientation='h'
                 )
             ],
 
             'layout': {
                 'title': 'Distribution of Message Genres',
                 'yaxis': {
-                    'title': "Count"
+                    'title': "Genre"
                 },
                 'xaxis': {
-                    'title': "Genre"
+                    'title': "Counts"
+                }
+            }
+        },
+
+        {
+            'data': [
+                Bar(
+                    x=histogram.index,
+                    y=histogram.values
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Messages Length',
+                'yaxis': {
+                    'title': "Total Messages"
+                },
+                'xaxis': {
+                    'title': "Total Words"
+                }
+            }
+        },
+
+        {
+            'data': [
+                Bar(
+                    x=total_category.index,
+                    y=total_category.values
+                )
+            ],
+
+            'layout': {
+                'title': 'Total Messages per Category (Top 5)',
+                'yaxis': {
+                    'title': "Total"
+                },
+                'xaxis': {
+                    'title': "Category"
                 }
             }
         }
