@@ -1,3 +1,4 @@
+import nltk
 import json
 import plotly
 import pandas as pd
@@ -5,6 +6,7 @@ import plotly.graph_objects as go
 
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+nltk.download(['punkt','wordnet'])
 
 from flask import Flask
 from flask import render_template, request, jsonify
