@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report
+from sklearn.model_selection import GridSearchCV
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from sklearn.pipeline import Pipeline
@@ -11,6 +12,7 @@ from sqlalchemy import create_engine
 
 import pandas as pd
 import numpy as np
+import pickle
 import nltk
 import sys
 nltk.download(['punkt','wordnet'])
@@ -53,9 +55,24 @@ def build_model():
 
     # Create a pipeline consists of count vectorizer -> KneighborsClassifier()
     pipeline = Pipeline([
-        ('vect', CountVectorizer(tokenizer=tokenize)),
-        ('clf', MultiOutputClassifier(KNeighborsClassifier()))
+        
+        ('text_pipeline', Pipeline([
+            ('vect', CountVectorizer(tokenizer=tokenize)),
+            ('tfidf', TfidfTransformer())
+        ])),
+
+        ('clf', RandomForestClassifier())
     ])
+
+    ## Find the optimal model using GridSearchCV
+    # parameters = {
+    #     'text_pipeline__tfidf__use_idf': (True, False),
+    #     'clf__max_features': ['auto', 'sqrt', 'log2'],
+    #     'clf__max_depth' : [7,8],
+    #     'clf__criterion' :['gini', 'entropy']
+    # }
+
+    # pipeline = GridSearchCV(pipeline, param_grid=parameters)
 
     return pipeline
 
@@ -69,7 +86,12 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
-    pass
+    """Save the given model into pickle object"""
+
+    # Save the model based on model_filepath given
+    pkl_filename = '{}.pkl'.format(model_filepath)
+    with open(pkl_filename, 'wb') as file:
+        pickle.dump(model, file)
 
 
 def main():
@@ -88,8 +110,8 @@ def main():
         print('Evaluating model...')
         evaluate_model(model, X_test, Y_test, category_names)
 
-        #print('Saving model...\n    MODEL: {}'.format(model_filepath))
-        #save_model(model, model_filepath)
+        print('Saving model...\n    MODEL: {}'.format(model_filepath))
+        save_model(model, model_filepath)
 
         print('Trained model saved!')
 
