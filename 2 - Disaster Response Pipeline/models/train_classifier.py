@@ -89,7 +89,7 @@ def save_model(model, model_filepath):
     """Save the given model into pickle object"""
 
     # Save the model based on model_filepath given
-    pkl_filename = '{}.pkl'.format(model_filepath)
+    pkl_filename = '{}'.format(model_filepath)
     with open(pkl_filename, 'wb') as file:
         pickle.dump(model, file)
 
