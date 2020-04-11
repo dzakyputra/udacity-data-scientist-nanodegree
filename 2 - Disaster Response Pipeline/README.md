@@ -24,14 +24,22 @@ Using scikit-learn, then we train the classifier to be able to get a model which
 Using flask, we can run our model and deploy in the website so that people can manually type the message and see its category. 
 
 ## Files
-`data/process_data.py`
+
+#### `data/disaster_categories.csv` , `data/disaster_messages.csv`
+
+The dataset we use in this project, `disaster_messages.csv` contains the message (translated and original) and genre of the message. `disaster_categories.csv` contains the categories of each message.
+
+#### `data/process_data.py`
+
 This file is used for the ETL process, where we merge the `disaster_messages.csv` and `disaster_categories.csv` then store it in sqlite database.
 
-`models/train_classifier.py`
+#### `models/train_classifier.py`
+
 This is where we train our model to obtain the classfier. We load the data from the sqlite database, do some text preprocessing using Count Vectorizer and TF-IDF, train the model, and save the model as a pickle object.
 
-`app/run.py`
-The flask application that being used to run the web app. You can modify the web page in the `templates/master.html`.
+#### `app/run.py`
+
+The flask application that being used to run the web app. You can modify the web page in the `app/templates/master.html` and `app/templates/go.html`.
 
 ## Instructions
 1. Run the following commands in the project's root directory to set up your database and model.
