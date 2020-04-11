@@ -1,6 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report
@@ -61,18 +62,16 @@ def build_model():
             ('tfidf', TfidfTransformer())
         ])),
 
-        ('clf', RandomForestClassifier())
+        ('clf', MultiOutputClassifier(KNeighborsClassifier()))
     ])
 
     ## Find the optimal model using GridSearchCV
-    # parameters = {
-    #     'text_pipeline__tfidf__use_idf': (True, False),
-    #     'clf__max_features': ['auto', 'sqrt', 'log2'],
-    #     'clf__max_depth' : [7,8],
-    #     'clf__criterion' :['gini', 'entropy']
-    # }
+    parameters = {
+        'text_pipeline__tfidf__use_idf': (True, False),
+        'clf__estimator__weights': ['uniform', 'distance']
+    }
 
-    # pipeline = GridSearchCV(pipeline, param_grid=parameters)
+    pipeline = GridSearchCV(pipeline, param_grid=parameters, verbose=5, cv=2, n_jobs=2)
 
     return pipeline
 

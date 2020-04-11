@@ -50,7 +50,7 @@ def save_data(df, database_filename):
     """Take the input dataframe and save it into sqlite database"""
     
     # Create sqlite engine and save the dataframe with the name messages
-    engine = create_engine('sqlite:///{}.db'.format(database_filename))
+    engine = create_engine('sqlite:///{}'.format(database_filename))
     df.to_sql('messages', engine, index=False)
 
 
