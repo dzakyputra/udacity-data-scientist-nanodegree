@@ -17,7 +17,7 @@ These are the questions I am trying to solve:
 2. What kind of customers that often completed the offer without viewing it?
 3. How is the income differentiate between customers type?
 
-## Conlusion
+## Conclusion
 Based on the analysis, there are several things we can conclude.
 1. With the unplanned offer, <b>we can “loss” up to $49,032 of revenue in a month or $588,384 of revenue in a year. So the target marketing of our offer is very important and plays a huge roll</b>.
 2. <b>Female customers tend to spend more than Male customers, with the average spending per transaction is $16,3 compared to $10,4 respectively</b>. Female customers also have tendency to complete the offer even without viewing it first, so we might want to be more careful in sending the offer to them.
