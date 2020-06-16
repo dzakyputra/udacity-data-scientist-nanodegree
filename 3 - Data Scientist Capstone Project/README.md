@@ -2,7 +2,7 @@
 
 You can read the article from this [link](https://medium.com/@dzakyputra/analyzing-starbucks-offer-data-cd44d39366fd?source=friends_link&sk=b0bf48325e3fa0afef4a2cf99e350eb2).
 
-You can check the jupyter notebook file to get the full code.
+You can check the jupyter notebook in the `Data_Scientist_Capstone_Project.ipynb` to get the full code.
 
 ---
 
